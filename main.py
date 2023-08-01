@@ -42,12 +42,37 @@ def commit_as_you_go(engine: Engine):
 
 
 def use_transaction_to_commit(engine: Engine):
-    """"Assumes commit_as_you_go has been called previously"""
+    """ "Assumes commit_as_you_go has been called previously"""
     with engine.begin() as conn:
         result: CursorResult = conn.execute(
             text("INSERT INTO some_table (x, y) VALUES (:x, :y)"),
             [{"x": 6, "y": 8}, {"x": 9, "y": 10}],
         )
+
+
+def fetch_rows(engine: Engine):
+    with engine.connect() as conn:
+        # access row contents using dot notation
+        result: CursorResult = conn.execute(text("SELECT x, y FROM some_table"))
+        row: Row
+        for row in result:
+            print(f"x: {row.x}  y: {row.y}")
+
+        # access row contents via column names:
+        result = conn.execute(text("select x, y from some_table"))
+        for x, y in result:
+            print(f"x: {x}  y: {y}")
+
+        # access row contents via positional index
+        result = conn.execute(text("select x, y from some_table"))
+        for row in result:
+            x = row[0]
+            y = row[1]
+            print(f"x: {x}  y: {y}")
+
+
+def fetch_rows_via_mapping(engine):
+    pass
 
 
 if __name__ == "__main__":
@@ -60,3 +85,5 @@ if __name__ == "__main__":
     display_hello_world(engine)
     commit_as_you_go(engine)
     use_transaction_to_commit(engine)
+    fetch_rows(engine)
+    fetch_rows_via_mapping(engine)
