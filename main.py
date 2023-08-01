@@ -5,7 +5,7 @@ https://docs.sqlalchemy.org/en/20/tutorial/engine.html
 import sys
 
 import sqlalchemy
-from sqlalchemy import create_engine, Engine
+from sqlalchemy import create_engine, Engine, text, CursorResult, Row
 
 
 def get_python_version() -> str:
@@ -18,7 +18,20 @@ def get_sqlalchemy_version() -> str:
 
 if __name__ == "__main__":
     print(f"python version: {get_python_version()}")
-    print(f'SQLAlchemy version: {get_sqlalchemy_version()}')
+    print(f"SQLAlchemy version: {get_sqlalchemy_version()}")
 
-    engine: Engine = create_engine('sqlite+pysqlite:///:memory:', echo=True)
-    print(type(engine))
+    engine: Engine = create_engine("sqlite+pysqlite:///:memory:", echo=True)
+    # print(type(engine))
+
+    with engine.connect() as conn:
+        result: CursorResult = conn.execute(text("select 'hello world'"))
+        print(type(result))
+        rows = result.all()
+        print(type(rows))
+        print(rows)
+        row: Row = rows[0] # sqlalchemy.engine.row.Row
+        # print(type(row))
+        print(row)
+        txt: str = row[0]
+        # print(type(txt))
+        print(txt)
