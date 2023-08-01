@@ -5,7 +5,7 @@ https://docs.sqlalchemy.org/en/20/tutorial/engine.html
 import sys
 
 import sqlalchemy
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, Engine
 
 
 def get_python_version() -> str:
@@ -19,3 +19,6 @@ def get_sqlalchemy_version() -> str:
 if __name__ == "__main__":
     print(f"python version: {get_python_version()}")
     print(f'SQLAlchemy version: {get_sqlalchemy_version()}')
+
+    engine: Engine = create_engine('sqlite+pysqlite:///:memory:', echo=True)
+    print(type(engine))
