@@ -102,4 +102,3 @@ if __name__ == "__main__":
     use_transaction_to_commit(engine)
     fetch_rows(engine)
     fetch_rows_via_mappings(engine)
-    
