@@ -67,7 +67,7 @@ def fetch_rows(engine: Engine):
             print(f"x: {row.x}  y: {row.y}")
 
         # access row contents via column names:
-        result = conn.execute(text("select x, y from some_table"))
+        result: CursorResult = conn.execute(text("select x, y from some_table"))
         for x, y in result:
             print(f"x: {x}  y: {y}")
 
