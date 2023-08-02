@@ -25,6 +25,7 @@ def get_sqlalchemy_version() -> str:
 
 
 def display_hello_world(engine: Engine):
+    print('\ndisplay_hello_world')
     with engine.connect() as conn:
         result: CursorResult = conn.execute(text("select 'hello world'"))
         print(type(result))
@@ -40,6 +41,7 @@ def display_hello_world(engine: Engine):
 
 
 def commit_as_you_go(engine: Engine):
+    print('\ncommit_as_you_go')
     with engine.connect() as conn:
         conn.execute(text("CREATE TABLE some_table (x int, y int)"))
         result: CursorResult = conn.execute(
@@ -51,6 +53,7 @@ def commit_as_you_go(engine: Engine):
 
 def use_transaction_to_commit(engine: Engine):
     """ "Assumes commit_as_you_go has been called previously"""
+    print('\nuse_transaction_to_commit')
     with engine.begin() as conn:
         result: CursorResult = conn.execute(
             text("INSERT INTO some_table (x, y) VALUES (:x, :y)"),
@@ -59,6 +62,7 @@ def use_transaction_to_commit(engine: Engine):
 
 
 def fetch_rows(engine: Engine):
+    print('\nfetch_rows')
     with engine.connect() as conn:
         # access row contents using dot notation
         result: CursorResult = conn.execute(text("SELECT x, y FROM some_table"))
@@ -80,6 +84,7 @@ def fetch_rows(engine: Engine):
 
 
 def fetch_rows_via_mappings(engine: Engine):
+    print('\nfetch_rows_via_mappings')
     with engine.connect() as conn:
         result: CursorResult = conn.execute(text("select x, y from some_table"))
         mappings: MappingResult = result.mappings()
