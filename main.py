@@ -5,7 +5,15 @@ https://docs.sqlalchemy.org/en/20/tutorial/engine.html
 import sys
 
 import sqlalchemy
-from sqlalchemy import create_engine, Engine, text, CursorResult, Row
+from sqlalchemy import (
+    create_engine,
+    Engine,
+    text,
+    CursorResult,
+    Row,
+    MappingResult,
+    RowMapping,
+)
 
 
 def get_python_version() -> str:
@@ -71,8 +79,15 @@ def fetch_rows(engine: Engine):
             print(f"x: {x}  y: {y}")
 
 
-def fetch_rows_via_mapping(engine):
-    pass
+def fetch_rows_via_mappings(engine: Engine):
+    with engine.connect() as conn:
+        result: CursorResult = conn.execute(text("select x, y from some_table"))
+        mappings: MappingResult = result.mappings()
+        dict_row: RowMapping
+        for dict_row in mappings:
+            x = dict_row["x"]
+            y = dict_row["y"]
+            print(f"x: {x}  y: {y}")
 
 
 if __name__ == "__main__":
@@ -86,4 +101,5 @@ if __name__ == "__main__":
     commit_as_you_go(engine)
     use_transaction_to_commit(engine)
     fetch_rows(engine)
-    fetch_rows_via_mapping(engine)
+    fetch_rows_via_mappings(engine)
+    
