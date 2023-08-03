@@ -114,6 +114,18 @@ def fetch_rows_via_mappings(engine: Engine):
             print(f"x: {x}  y: {y}")
 
 
+def fetch_rows_using_bound_parameters(engine: Engine):
+    """
+    Fetch rows from a table using bound parameters
+    :type engine: Engine
+    """
+    print('\nfetch_rows_using_bound_parameters')
+    with engine.connect() as conn:
+        result: CursorResult = conn.execute(text("SELECT x, y FROM some_table WHERE y > :y"), {"y": 2})
+        for row in result:
+            print(f"x: {row.x}  y: {row.y}")
+
+
 if __name__ == "__main__":
     print(f"python version: {get_python_version()}")
     print(f"SQLAlchemy version: {get_sqlalchemy_version()}")
@@ -126,3 +138,5 @@ if __name__ == "__main__":
     use_transaction_to_commit(engine)
     fetch_rows(engine)
     fetch_rows_via_mappings(engine)
+    fetch_rows_using_bound_parameters(engine)
+    
