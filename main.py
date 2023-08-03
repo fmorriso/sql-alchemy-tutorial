@@ -13,6 +13,7 @@ from sqlalchemy import (
     Row,
     MappingResult,
     RowMapping,
+    Sequence,
 )
 
 
@@ -114,16 +115,34 @@ def fetch_rows_via_mappings(engine: Engine):
             print(f"x: {x}  y: {y}")
 
 
-def fetch_rows_using_bound_parameters(engine: Engine):
+def fetch_rows_using_bound_parameter(engine: Engine):
     """
-    Fetch rows from a table using bound parameters
+    Fetch rows from a table using a single bound parameter
     :type engine: Engine
     """
-    print('\nfetch_rows_using_bound_parameters')
+    print('\nfetch_rows_using_bound_parameter')
     with engine.connect() as conn:
         result: CursorResult = conn.execute(text("SELECT x, y FROM some_table WHERE y > :y"), {"y": 2})
         for row in result:
             print(f"x: {row.x}  y: {row.y}")
+
+
+def fetch_rows_using_multiple_parameters(engine: Engine):
+    """
+    Fetch rows from a table using multiple parameters
+    :type engine: Engine
+    """
+    print(f'\nfetch_rows_using_multiple_parameters')
+    with engine.connect() as conn:
+        params: Sequence = [{"x": 11, "y": 12}, {"x": 13, "y": 14}]
+        # NOTE: added DELETE so we can run the program multiple times
+        result: CursorResult = conn.execute(
+            text('DELETE FROM some_table WHERE x = :x AND y = :y'), params
+        )
+        result: CursorResult = conn.execute(
+            text("INSERT INTO some_table (x, y) VALUES (:x, :y)"), params
+        )
+        conn.commit()
 
 
 if __name__ == "__main__":
@@ -138,5 +157,8 @@ if __name__ == "__main__":
     use_transaction_to_commit(engine)
     fetch_rows(engine)
     fetch_rows_via_mappings(engine)
-    fetch_rows_using_bound_parameters(engine)
+    fetch_rows_using_bound_parameter(engine)
+    fetch_rows_using_multiple_parameters(engine)
+    
+
     
