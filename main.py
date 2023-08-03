@@ -149,6 +149,10 @@ def fetch_rows_using_multiple_parameters(engine: Engine):
 
 
 def orm_fetch_rows_using_parameter(engine: Engine):
+    """
+    Example of using SQLAlchemy Session to fetch multiple rows via a single parameter
+    :type engine: Engine
+    """
     print('\norm_fetch_rows_using_parameter')
     # Notice we can use a DocString to make the SQL DML statement easier to read
     stmt: TextClause = text(
