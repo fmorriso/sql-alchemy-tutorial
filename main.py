@@ -14,7 +14,10 @@ from sqlalchemy import (
     MappingResult,
     RowMapping,
     Sequence,
+    TextClause,
+    Result,
 )
+from sqlalchemy.orm import (Session)
 
 
 def get_python_version() -> str:
@@ -145,6 +148,24 @@ def fetch_rows_using_multiple_parameters(engine: Engine):
         conn.commit()
 
 
+def orm_fetch_rows_using_parameter(engine: Engine):
+    print('\norm_fetch_rows_using_parameter')
+    # Notice we can use a DocString to make the SQL DML statement easier to read
+    stmt: TextClause = text(
+        """
+        SELECT x, y 
+           FROM some_table 
+           WHERE y > :y 
+           ORDER BY x, y;
+        """
+    )
+    params: Sequence = {"y": 6}
+    with Session(engine) as session:
+        result: Result = session.execute(stmt, params)
+        for row in result:
+            print(f"x: {row.x}  y: {row.y}")
+
+
 if __name__ == "__main__":
     print(f"python version: {get_python_version()}")
     print(f"SQLAlchemy version: {get_sqlalchemy_version()}")
@@ -159,6 +180,7 @@ if __name__ == "__main__":
     fetch_rows_via_mappings(engine)
     fetch_rows_using_bound_parameter(engine)
     fetch_rows_using_multiple_parameters(engine)
-    
+    orm_fetch_rows_using_parameter(engine)
+
 
     
