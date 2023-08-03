@@ -170,6 +170,21 @@ def orm_fetch_rows_using_parameter(engine: Engine):
             print(f"x: {row.x}  y: {row.y}")
 
 
+def orm_update_rows(engine: Engine):
+    """
+    Update multiple rows using ORM and parameters
+    :type engine: object
+    """
+    print('\norm_update_rows')
+    params: Sequence = [{"x": 9, "y": 11}, {"x": 13, "y": 15}]
+    with Session(engine) as session:
+        result: Result = session.execute(
+            text("UPDATE some_table SET y=:y WHERE x=:x"), params
+        )
+        session.commit()
+        print(f'Rows affected: {result.rowcount}')
+
+
 if __name__ == "__main__":
     print(f"python version: {get_python_version()}")
     print(f"SQLAlchemy version: {get_sqlalchemy_version()}")
@@ -185,6 +200,6 @@ if __name__ == "__main__":
     fetch_rows_using_bound_parameter(engine)
     fetch_rows_using_multiple_parameters(engine)
     orm_fetch_rows_using_parameter(engine)
-
-
+    orm_update_rows(engine);
+    fetch_rows(engine)
     
