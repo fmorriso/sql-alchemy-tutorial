@@ -25,6 +25,10 @@ def get_sqlalchemy_version() -> str:
 
 
 def display_hello_world(engine: Engine):
+    """
+    A simple Hello, World example using a SQL SELECT and a literal string
+    :type engine: Engine
+    """
     print('\ndisplay_hello_world')
     with engine.connect() as conn:
         result: CursorResult = conn.execute(text("select 'hello world'"))
@@ -41,6 +45,10 @@ def display_hello_world(engine: Engine):
 
 
 def commit_as_you_go(engine: Engine):
+    """
+    Uses SQLAlchemy's built-in COMMIT capability to control when a batch of SQL DML actions are committed to the database.
+    :type engine: Engine
+    """
     print('\ncommit_as_you_go')
     with engine.connect() as conn:
         conn.execute(text("CREATE TABLE some_table (x int, y int)"))
@@ -52,7 +60,10 @@ def commit_as_you_go(engine: Engine):
 
 
 def use_transaction_to_commit(engine: Engine):
-    """ "Assumes commit_as_you_go has been called previously"""
+    """Uses SQLAlchemy's built-in "BEGIN TRANSACTION" capability
+    Assumes commit_as_you_go has been called previously
+    :type engine: Engine
+    """
     print('\nuse_transaction_to_commit')
     with engine.begin() as conn:
         result: CursorResult = conn.execute(
@@ -62,6 +73,10 @@ def use_transaction_to_commit(engine: Engine):
 
 
 def fetch_rows(engine: Engine):
+    """
+    Fetches rows from a table using various techniques.
+    :type engine: Engine
+    """
     print('\nfetch_rows')
     with engine.connect() as conn:
         # access row contents using dot notation
@@ -84,6 +99,10 @@ def fetch_rows(engine: Engine):
 
 
 def fetch_rows_via_mappings(engine: Engine):
+    """
+    Fetches rows from a table using SQLAlchemy mappings that present each row as an instance of a RowMapping.
+    :type engine: Engine
+    """
     print('\nfetch_rows_via_mappings')
     with engine.connect() as conn:
         result: CursorResult = conn.execute(text("select x, y from some_table"))
