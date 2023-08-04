@@ -61,6 +61,7 @@ def commit_as_you_go(engine: Engine):
             [{"x": 1, "y": 1}, {"x": 2, "y": 4}],
         )
         conn.commit()
+        print(f"Rows inserted: {result.rowcount}")
 
 
 def use_transaction_to_commit(engine: Engine):
@@ -74,6 +75,7 @@ def use_transaction_to_commit(engine: Engine):
             text("INSERT INTO some_table (x, y) VALUES (:x, :y)"),
             [{"x": 6, "y": 8}, {"x": 9, "y": 10}],
         )
+        print(f"Rows inserted: {result.rowcount}")
 
 
 def fetch_rows(engine: Engine):
@@ -138,14 +140,17 @@ def fetch_rows_using_multiple_parameters(engine: Engine):
     print(f'\nfetch_rows_using_multiple_parameters')
     with engine.connect() as conn:
         params: Sequence = [{"x": 11, "y": 12}, {"x": 13, "y": 14}]
-        # NOTE: added DELETE so we can run the program multiple times
+        # NOTE: added DELETE, so we can run the program multiple times
         result: CursorResult = conn.execute(
             text('DELETE FROM some_table WHERE x = :x AND y = :y'), params
         )
+        conn.commit()
+        print(f"Rows deleted: {result.rowcount}")
         result: CursorResult = conn.execute(
             text("INSERT INTO some_table (x, y) VALUES (:x, :y)"), params
         )
         conn.commit()
+        print(f"Rows inserted: {result.rowcount}")
 
 
 def orm_fetch_rows_using_parameter(engine: Engine):
