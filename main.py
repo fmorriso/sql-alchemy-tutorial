@@ -2,7 +2,7 @@
 https://docs.sqlalchemy.org/en/20/tutorial/index.html
 """
 import inspect
-import sys
+import sys, inspect
 
 import sqlalchemy
 from sqlalchemy import (
@@ -33,7 +33,7 @@ def display_hello_world(engine: Engine):
     A simple Hello, World example using a SQL SELECT and a literal string
     :type engine: Engine
     """
-    print(f'\n{sys._getframe().f_code.co_name}')
+    print(f'\n{inspect.getframeinfo(inspect.currentframe()).function}')
     with engine.connect() as conn:
         result: CursorResult = conn.execute(text("select 'hello world'"))
         print(type(result))
@@ -53,7 +53,7 @@ def commit_as_you_go(engine: Engine):
     Uses SQLAlchemy's built-in COMMIT capability to control when a batch of SQL DML actions are committed to the database.
     :type engine: Engine
     """
-    print(f'\n{sys._getframe().f_code.co_name}')
+    print(f'\n{inspect.getframeinfo(inspect.currentframe()).function}')
     with engine.connect() as conn:
         conn.execute(text("CREATE TABLE some_table (x int, y int)"))
         result: CursorResult = conn.execute(
@@ -69,7 +69,7 @@ def use_transaction_to_commit(engine: Engine):
     Assumes commit_as_you_go has been called previously
     :type engine: Engine
     """
-    print(f'\n{sys._getframe().f_code.co_name}')
+    print(f'\n{inspect.getframeinfo(inspect.currentframe()).function}')
     with engine.begin() as conn:
         result: CursorResult = conn.execute(
             text("INSERT INTO some_table (x, y) VALUES (:x, :y)"),
@@ -83,7 +83,7 @@ def fetch_rows(engine: Engine):
     Fetches rows from a table using various techniques.
     :type engine: Engine
     """
-    print(f'\n{sys._getframe().f_code.co_name}')
+    print(f'\n{inspect.getframeinfo(inspect.currentframe()).function}')
     with engine.connect() as conn:
         # access row contents using dot notation
         result: CursorResult = conn.execute(text("SELECT x, y FROM some_table"))
@@ -109,7 +109,7 @@ def fetch_rows_via_mappings(engine: Engine):
     Fetches rows from a table using SQLAlchemy mappings that present each row as an instance of a RowMapping.
     :type engine: Engine
     """
-    print(f'\n{sys._getframe().f_code.co_name}')
+    print(f'\n{inspect.getframeinfo(inspect.currentframe()).function}')
     with engine.connect() as conn:
         result: CursorResult = conn.execute(text("select x, y from some_table"))
         mappings: MappingResult = result.mappings()
@@ -125,7 +125,7 @@ def fetch_rows_using_bound_parameter(engine: Engine):
     Fetch rows from a table using a single bound parameter
     :type engine: Engine
     """
-    print('\nfetch_rows_using_bound_parameter')
+    print(f'\n{inspect.getframeinfo(inspect.currentframe()).function}')
     with engine.connect() as conn:
         result: CursorResult = conn.execute(text("SELECT x, y FROM some_table WHERE y > :y"), {"y": 2})
         for row in result:
@@ -137,7 +137,7 @@ def fetch_rows_using_multiple_parameters(engine: Engine):
     Fetch rows from a table using multiple parameters
     :type engine: Engine
     """
-    print(f'\n{sys._getframe().f_code.co_name}')
+    print(f'\n{inspect.getframeinfo(inspect.currentframe()).function}')
     with engine.connect() as conn:
         params: Sequence = [{"x": 11, "y": 12}, {"x": 13, "y": 14}]
         # NOTE: added DELETE, so we can run the program multiple times
@@ -158,7 +158,7 @@ def orm_fetch_rows_using_parameter(engine: Engine):
     Example of using SQLAlchemy Session to fetch multiple rows via a single parameter
     :type engine: Engine
     """
-    print(f'\n{sys._getframe().f_code.co_name}')
+    print(f'\n{inspect.getframeinfo(inspect.currentframe()).function}')
     # Notice we can use a DocString to make the SQL DML statement easier to read
     stmt: TextClause = text(
         """
@@ -180,7 +180,7 @@ def orm_update_rows(engine: Engine):
     Update multiple rows using ORM and parameters
     :type engine: object
     """
-    print(f'\n{sys._getframe().f_code.co_name}')
+    print(f'\n{inspect.getframeinfo(inspect.currentframe()).function}')
     params: Sequence = [{"x": 9, "y": 11}, {"x": 13, "y": 15}]
     with Session(engine) as session:
         result: Result = session.execute(
@@ -193,6 +193,7 @@ def orm_update_rows(engine: Engine):
 if __name__ == "__main__":
     print(f"python version: {get_python_version()}")
     print(f"SQLAlchemy version: {get_sqlalchemy_version()}")
+
 
     engine: Engine = create_engine("sqlite+pysqlite:///:memory:", echo=True)
     # print(type(engine))
@@ -207,4 +208,4 @@ if __name__ == "__main__":
     orm_fetch_rows_using_parameter(engine)
     orm_update_rows(engine);
     fetch_rows(engine)
-    
+
