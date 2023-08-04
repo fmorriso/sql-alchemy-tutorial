@@ -16,9 +16,16 @@ from sqlalchemy import (
     Sequence,
     TextClause,
     Result,
+    MetaData,
+    Table,
+    Column,
+    Integer,
+    String,
+    ForeignKey,
 )
 from sqlalchemy.orm import (Session)
 
+metadata_obj = MetaData()
 
 def get_python_version() -> str:
     return f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
@@ -37,9 +44,9 @@ def display_hello_world(engine: Engine):
     with engine.connect() as conn:
         result: CursorResult = conn.execute(text("select 'hello world'"))
         print(type(result))
-        rows = result.all()
+        rows: Sequence[str] = result.all()
         print(type(rows))
-        print(rows)
+        # print(rows)
         row: Row = rows[0]  # sqlalchemy.engine.row.Row
         # print(type(row))
         print(row)
@@ -191,6 +198,36 @@ def orm_update_rows(engine: Engine):
         print(f'Rows affected: {result.rowcount}')
 
 
+def create_table_via_metadata(engine):
+    print(f"\n{inspect.currentframe().f_code.co_name}")
+    user_table = Table(
+        "user_account",
+        metadata_obj,
+        Column("id", Integer, primary_key=True),
+        Column("name", String(30)),
+        Column("fullname", String),
+    )
+    print(f'table: {user_table.name}')
+    for col in user_table.columns:
+        nullable: str = 'NULL' if col.nullable else 'NOT NULL'
+        print(f'\t{col.name:15}{str(col.type):15}{nullable:12}')
+
+
+def create_table_with_foreign_key(engine):
+    print(f"\n{inspect.currentframe().f_code.co_name}")
+    address_table = Table(
+        "address",
+        metadata_obj,
+        Column("id", Integer, primary_key=True),
+        Column("user_id", ForeignKey("user_account.id"), nullable=False),
+        Column("email_address", String, nullable=False),
+    )
+    print(f'table: {address_table.name}')
+    for col in address_table.columns:
+        nullable: str = 'NULL' if col.nullable else 'NOT NULL'
+        print(f'\t{col.name:15}{str(col.type):15}{nullable:12}')
+
+
 if __name__ == "__main__":
     print(f"python version: {get_python_version()}")
     print(f"SQLAlchemy version: {get_sqlalchemy_version()}")
@@ -207,6 +244,8 @@ if __name__ == "__main__":
     fetch_rows_using_bound_parameter(engine)
     fetch_rows_using_multiple_parameters(engine)
     orm_fetch_rows_using_parameter(engine)
-    orm_update_rows(engine);
-    fetch_rows(engine)
+    orm_update_rows(engine)
+    create_table_via_metadata(engine)
+    create_table_with_foreign_key(engine)
+
 
