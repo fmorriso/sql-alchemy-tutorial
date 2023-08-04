@@ -254,5 +254,7 @@ if __name__ == "__main__":
     fetch_rows_using_multiple_parameters(engine)
     orm_fetch_rows_using_parameter(engine)
     orm_update_rows(engine)
+    # https://docs.sqlalchemy.org/en/20/tutorial/metadata.html
     create_table_via_metadata(engine)
     create_table_with_foreign_key(engine)
+    metadata_obj.create_all(engine)
