@@ -9,7 +9,7 @@ from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 
-from base import Base
+from tableBase import Base
 
 
 class User(Base):

@@ -271,3 +271,4 @@ if __name__ == "__main__":
     create_table_via_metadata(engine)
     create_table_with_foreign_key(engine)
     orm_create_tables(engine)
+    # https://docs.sqlalchemy.org/en/20/tutorial/data.html
