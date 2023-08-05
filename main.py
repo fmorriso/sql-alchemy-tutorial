@@ -204,14 +204,16 @@ def orm_update_rows(engine: Engine):
 def display_table_columns(table: Table):
     print(f"table: {table.name}")
     for col in table.columns:
-        primary_key: str = 'Primary Key' if col.primary_key else ''
+        primary_key: str = "Primary Key" if col.primary_key else ""
         nullable: str = "NULL" if col.nullable else "NOT NULL"
         fk: set = col.foreign_keys
-        foreign_key : str = ''
+        foreign_key: str = ""
         if len(col.foreign_keys) > 0:
             fk = list(col.foreign_keys)[0]
-            foreign_key = f'FK: {str(fk.column)}'
-        print(f"\t{col.name:15}{str(col.type):15}{nullable:12}{primary_key:15}{foreign_key:15}")
+            foreign_key = f"FK: {str(fk.column)}"
+        print(
+            f"\t{col.name:15}{str(col.type):15}{nullable:12}{primary_key:15}{foreign_key:15}"
+        )
 
 
 def create_table_via_metadata(engine):
@@ -238,6 +240,18 @@ def create_table_with_foreign_key(engine):
     display_table_columns(address_table)
 
 
+def orm_create_tables(engine):
+    # https://docs.sqlalchemy.org/en/20/tutorial/metadata.html
+    print(f"\n{inspect.currentframe().f_code.co_name}")
+
+    metadata_obj.drop_all(engine)
+    metadata_obj.create_all(engine)
+    # table reflection
+    some_table = Table("some_table", metadata_obj, autoload_with=engine)
+    display_table_columns(some_table)
+    print(some_table)
+
+
 if __name__ == "__main__":
     print(f"python version: {get_python_version()}")
     print(f"SQLAlchemy version: {get_sqlalchemy_version()}")
@@ -254,7 +268,6 @@ if __name__ == "__main__":
     fetch_rows_using_multiple_parameters(engine)
     orm_fetch_rows_using_parameter(engine)
     orm_update_rows(engine)
-    # https://docs.sqlalchemy.org/en/20/tutorial/metadata.html
     create_table_via_metadata(engine)
     create_table_with_foreign_key(engine)
-    metadata_obj.create_all(engine)
+    orm_create_tables(engine)
