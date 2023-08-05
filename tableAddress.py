@@ -1,6 +1,6 @@
-from typing import List
-from typing import Optional
-
+"""
+https://docs.sqlalchemy.org/en/20/tutorial/metadata.html - scroll down to Declaring Mapped Classes
+"""
 from sqlalchemy import String, ForeignKey
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
@@ -8,6 +8,7 @@ from sqlalchemy.orm import relationship
 
 from base import Base
 from tableUserAccount import User
+
 
 class Address(Base):
     __tablename__ = "address"
