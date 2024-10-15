@@ -90,7 +90,7 @@ def use_transaction_to_commit(engine: Engine):
 def fetch_rows(engine: Engine):
     """
     Fetches rows from a table using various techniques.
-    :type engine: Engine
+    :param engine: Engine
     """
     print(f"\n{inspect.currentframe().f_code.co_name}")
     with engine.connect() as conn:
@@ -116,7 +116,7 @@ def fetch_rows(engine: Engine):
 def fetch_rows_via_mappings(engine: Engine):
     """
     Fetches rows from a table using SQLAlchemy mappings that present each row as an instance of a RowMapping.
-    :type engine: Engine
+    :param engine: Engine
     """
     print(f"\n{inspect.currentframe().f_code.co_name}")
     with engine.connect() as conn:
@@ -189,7 +189,7 @@ def orm_fetch_rows_using_parameter(engine: Engine):
 def orm_update_rows(engine: Engine):
     """
     Update multiple rows using ORM and parameters
-    :type engine: object
+    :param engine: object
     """
     print(f"\n{inspect.currentframe().f_code.co_name}")
     params: Sequence = [{"x": 9, "y": 11}, {"x": 13, "y": 15}]
