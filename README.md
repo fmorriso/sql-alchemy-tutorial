@@ -6,7 +6,7 @@ SqlAlchemy Tutorial
 | Python                 |   3.13.0 |
 | VSCode                 |   1.94.2 |
 | PyCharm                | 2024.2.3 |
-| SQLite3                |   3.45.3 |
+| SQLite3                |   3.46.1 |
 | SQLiteCloud            |   0.0.83 |
 | SqlAlchemy             |   2.0.36 |
 
