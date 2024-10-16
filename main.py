@@ -36,11 +36,16 @@ def get_sqlalchemy_version() -> str:
     return sqlalchemy.__version__
 
 
+def print_separator():
+    print('=' * 100)
+
+
 def display_hello_world(engine: Engine):
     """
     A simple Hello, World example using a SQL SELECT and a literal string
     :type engine: Engine
     """
+    print_separator()
     print(f"\n{inspect.currentframe().f_code.co_name}")
     with engine.connect() as conn:
         result: CursorResult = conn.execute(text("select 'hello world'"))
@@ -61,7 +66,8 @@ def commit_as_you_go(engine: Engine):
     Uses SQLAlchemy's built-in COMMIT capability to control when a batch of SQL DML actions are committed to the database.
     :type engine: Engine
     """
-    print(f"\n{inspect.currentframe().f_code.co_name}")
+    print_separator()
+    print(f"{inspect.currentframe().f_code.co_name}")
     with engine.connect() as conn:
         conn.execute(text("CREATE TABLE some_table (x int, y int)"))
         result: CursorResult = conn.execute(
@@ -77,7 +83,8 @@ def use_transaction_to_commit(engine: Engine):
     Assumes commit_as_you_go has been called previously
     :type engine: Engine
     """
-    print(f"\n{inspect.currentframe().f_code.co_name}")
+    print_separator()
+    print(f"{inspect.currentframe().f_code.co_name}")
 
     with engine.begin() as conn:
         result: CursorResult = conn.execute(
@@ -92,7 +99,8 @@ def fetch_rows(engine: Engine):
     Fetches rows from a table using various techniques.
     :param engine: Engine
     """
-    print(f"\n{inspect.currentframe().f_code.co_name}")
+    print_separator()
+    print(f"{inspect.currentframe().f_code.co_name}")
     with engine.connect() as conn:
         # access row contents using dot notation
         result: CursorResult = conn.execute(text("SELECT x, y FROM some_table"))
@@ -118,7 +126,8 @@ def fetch_rows_via_mappings(engine: Engine):
     Fetches rows from a table using SQLAlchemy mappings that present each row as an instance of a RowMapping.
     :param engine: Engine
     """
-    print(f"\n{inspect.currentframe().f_code.co_name}")
+    print_separator()
+    print(f"{inspect.currentframe().f_code.co_name}")
     with engine.connect() as conn:
         result: CursorResult = conn.execute(text("select x, y from some_table"))
         mappings: MappingResult = result.mappings()
@@ -134,7 +143,8 @@ def fetch_rows_using_bound_parameter(engine: Engine):
     Fetch rows from a table using a single bound parameter
     :type engine: Engine
     """
-    print(f"\n{inspect.currentframe().f_code.co_name}")
+    print_separator()
+    print(f"{inspect.currentframe().f_code.co_name}")
     with engine.connect() as conn:
         result: CursorResult = conn.execute(
             text("SELECT x, y FROM some_table WHERE y > :y"), {"y": 2}
@@ -148,7 +158,8 @@ def fetch_rows_using_multiple_parameters(engine: Engine):
     Fetch rows from a table using multiple parameters
     :type engine: Engine
     """
-    print(f"\n{inspect.currentframe().f_code.co_name}")
+    print_separator()
+    print(f"{inspect.currentframe().f_code.co_name}")
     with engine.connect() as conn:
         params: Sequence = [{"x": 11, "y": 12}, {"x": 13, "y": 14}]
         # NOTE: added DELETE, so we can run the program multiple times
@@ -169,7 +180,8 @@ def orm_fetch_rows_using_parameter(engine: Engine):
     Example of using SQLAlchemy Session to fetch multiple rows via a single parameter
     :type engine: Engine
     """
-    print(f"\n{inspect.currentframe().f_code.co_name}")
+    print_separator()
+    print(f"{inspect.currentframe().f_code.co_name}")
     # Notice we can use a DocString to make the SQL DML statement easier to read
     stmt: TextClause = text(
         """
@@ -191,7 +203,8 @@ def orm_update_rows(engine: Engine):
     Update multiple rows using ORM and parameters
     :param engine: object
     """
-    print(f"\n{inspect.currentframe().f_code.co_name}")
+    print_separator()
+    print(f"{inspect.currentframe().f_code.co_name}")
     params: Sequence = [{"x": 9, "y": 11}, {"x": 13, "y": 15}]
     with Session(engine) as session:
         result: Result = session.execute(
@@ -202,6 +215,8 @@ def orm_update_rows(engine: Engine):
 
 
 def display_table_columns(table: Table):
+    print_separator()
+    print(f"{inspect.currentframe().f_code.co_name}")
     print(f"table: {table.name}")
     for col in table.columns:
         primary_key: str = "Primary Key" if col.primary_key else ""
@@ -217,7 +232,8 @@ def display_table_columns(table: Table):
 
 
 def create_table_via_metadata(engine):
-    print(f"\n{inspect.currentframe().f_code.co_name}")
+    print_separator()
+    print(f"{inspect.currentframe().f_code.co_name}")
     user_table = Table(
         "user_account",
         metadata_obj,
@@ -229,7 +245,8 @@ def create_table_via_metadata(engine):
 
 
 def create_table_with_foreign_key(engine):
-    print(f"\n{inspect.currentframe().f_code.co_name}")
+    print_separator()
+    print(f"{inspect.currentframe().f_code.co_name}")
     address_table = Table(
         "address",
         metadata_obj,
@@ -242,7 +259,8 @@ def create_table_with_foreign_key(engine):
 
 def orm_create_tables(engine):
     # https://docs.sqlalchemy.org/en/20/tutorial/metadata.html
-    print(f"\n{inspect.currentframe().f_code.co_name}")
+    print_separator()
+    print(f"{inspect.currentframe().f_code.co_name}")
 
     metadata_obj.drop_all(engine)
     metadata_obj.create_all(engine)
