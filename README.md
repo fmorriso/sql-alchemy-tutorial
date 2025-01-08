@@ -3,7 +3,7 @@ SqlAlchemy Tutorial
 ## Tools Used
 | Tool                   |  Version |
 |:-----------------------|---------:|
-| Python                 |   3.13.0 |
+| Python                 |   3.13.1 |
 | VSCode                 |   1.94.2 |
 | PyCharm                | 2024.2.3 |
 | SQLite3                |   3.46.1 |
@@ -17,6 +17,7 @@ SqlAlchemy Tutorial
  |:-----------|:-------------------------------------------------------------|
  | 2023-08-01 | Initial creation of shell files                              |
  | 2024-10-15 | Attempt to run with latest versions of Python (3.13.0), etc. |
+ | 2025-01-07 | Verify code works with Python 3.13.1 |
 
 
 ## References
